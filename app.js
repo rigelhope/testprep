@@ -11,7 +11,10 @@ app.controller('testprepController', function($scope,$http){
             qidList.push(qbank[i].id);
         };
         $scope.qidList = qidList;
+
+        /* this can actually go in a setter function, and initialize the array pointer to [0] */
         $scope.qstem = qbank[0].prompt;
+        $scope.answerList = qbank[0].answerList;
     })
 
     
