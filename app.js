@@ -1,9 +1,9 @@
-var app = angular.module('testprep', []);
+var app = angular.module('testprep', ['ngSanitize']);
 
-app.controller('testprepController', function($scope, $http){
+app.controller('testprepController', function($scope,$http){
     var qbank = [];
     var qidList = [];
-
+    var qstem = "";
 
     $http.get('generated.json').then(function(result) {
         qbank = result.data;
@@ -11,6 +11,7 @@ app.controller('testprepController', function($scope, $http){
             qidList.push(qbank[i].id);
         };
         $scope.qidList = qidList;
+        $scope.qstem = qbank[0].prompt;
     })
 
     

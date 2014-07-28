@@ -1,6 +1,7 @@
 <html ng-app="testprep">
 <head>
     <script src="angular.js"></script>
+    <script src="angular-sanitize.js"></script>
     <script src="app.js"></script>
     <link href="testprep.css" rel="stylesheet" type="text/css">
 </head>
@@ -12,7 +13,7 @@
     <div class="navbar">
     </div>
     <div class="question-content">
-        <div class="question-text">
+        <div class="question-text" ng-bind-html="qstem">
         </div>
     </div>
 </div>
