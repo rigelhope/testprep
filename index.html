@@ -1,0 +1,20 @@
+<html ng-app="testprep">
+<head>
+    <script src="angular.js"></script>
+    <script src="app.js"></script>
+    <link href="testprep.css" rel="stylesheet" type="text/css">
+</head>
+<body ng-controller="testprepController">
+<div id="content">
+    <div class="question-list">
+        <li ng-repeat="q in qidList" ng-bind="q"></li>
+    </div>
+    <div class="navbar">
+    </div>
+    <div class="question-content">
+        <div class="question-text">
+        </div>
+    </div>
+</div>
+</body>
+</html>

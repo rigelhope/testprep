@@ -1,0 +1,6 @@
+#content {height:100%;width:100%; padding:0px;}
+.question-list {width:100px; float:left; background: yellow; max-height:100%; overflow:auto;}
+.question-list li:nth-child(odd) {background:blue;}
+.navbar {height:10%; float:top; background:green;}
+.question-content {background:aqua; max-height:90%; padding:15px; overflow:auto;}
+
