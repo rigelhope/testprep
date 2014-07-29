@@ -2,29 +2,32 @@
 
     var app = angular.module('testprep', ['ngSanitize']);
     
-    app.controller('testprepController', function($scope,$http){
-        var qbank = [];
-        var qidList = [];
-        
-
-
-        function setPointer(newIndex) {
-            var i = qidList.indexOf(newIndex);
-            $scope.qstem = qbank[i].prompt;
-            $scope.qanswerList = qbank[i].answerList;
-            $scope.qexplanation = qbank[i].explanation;
-            $scope.currentIndex = newIndex;
+    app.controller('testprepController', function($scope, DataService){
+        $scope.qbank = DataService.qbank
+        $scope.selectedQuestion = DataService.selectedItem;
+        $scope.setPointer = function(selectedQuestion) {
+            DataService.setSelected(selectedQuestion);
         };
-    
-        $http.get('generated.json').then(function(result) {
-            qbank = result.data;
-            for (var i=0, l=qbank.length;i<l;i++) {
-                qidList.push(qbank[i].id);
-            };
-            $scope.qidList = qidList;
-            setPointer(qidList[0]);
-    
-        })
         
     });
+    
+    app.service("DataService", function($http){
+      var service = {
+        qbank:[],
+        selectedItem:{},
+        setSelected: function(selectedItem){
+          angular.copy(selectedItem, service.selectedItem);
+          console.log(service.selectedItem)
+        },
+        getData: function(){
+          $http.get('generated.json').then(function(result) {
+              angular.copy(result.data,service.qbank);
+              service.setSelected(service.qbank[0])
+          })
+        }
+      };
+      service.getData();
+      return service;
+    })
 })();
+
