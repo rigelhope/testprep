@@ -13,12 +13,20 @@
     <div class="navbar">
     </div>
     <div class="question-content">
-        <div class="question-text" ng-bind-html="qstem">
-        </div>
+        <div class="question-text" ng-bind-html="qstem"></div>
         <div class="question-option" ng-repeat="answer in answerList.answer">
             <br />
-            <input type="radio"><span ng-bind-html="answer"></span>
+            <input type="radio"><!--needs callback to mark problem as answered when clicked -->
+            <span ng-bind-html="answer"><!--needs strikeout when clicked, maybe change to an anchor or button? --></span>
         </div>
+        <br />
+        <!-- doesnt work yet. separate controller, maybe not necessary.
+        <div class="peek-button" ng-controller="peekController">
+            <a href ng-click="peek.showIt()">show answer</a>
+            <br />
+            <span ng-show="peek.showing" ng-bind-html="explanation">explanation goes here</span>
+        </div>
+-->
     </div>
 </div>
 </body>
