@@ -6,6 +6,11 @@
         var qbank = [];
         var qidList = [];
         var qstem = "";
+        var qexplanation="";
+
+        function setPointer(newQID) {
+            /* make an object that has all the relevant stuff to change, and return that */
+        };
     
         $http.get('generated.json').then(function(result) {
             qbank = result.data;
@@ -17,16 +22,8 @@
             /* this can actually go in a setter function, and initialize the array pointer to [0] */
             $scope.qstem = qbank[0].prompt;
             $scope.answerList = qbank[0].answerList;
+            $scope.qexplanation = qbank[0].explanation;
         })
-    
         
-        
-    })
-    .controller('peekController', function($scope) {
-        var showing = true;
-
-        this.showIt = function(showing) {
-            showing = true;
-        };
     });
 })();

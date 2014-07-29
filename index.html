@@ -20,13 +20,13 @@
             <span ng-bind-html="answer"><!--needs strikeout when clicked, maybe change to an anchor or button? --></span>
         </div>
         <br />
-        <!-- doesnt work yet. separate controller, maybe not necessary.
-        <div class="peek-button" ng-controller="peekController">
-            <a href ng-click="peek.showIt()">show answer</a>
-            <br />
-            <span ng-show="peek.showing" ng-bind-html="explanation">explanation goes here</span>
+        <div class="show-answer-box">
+            <label>show answer :<input type="checkbox" ng-model="mustShow" /></label>
         </div>
--->
+        <br />
+        <div class="explanation" ng-show="mustShow">
+            <span ng-bind-html="qexplanation"></span>
+        </div>
     </div>
 </div>
 </body>
