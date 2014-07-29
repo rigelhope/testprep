@@ -5,16 +5,18 @@
     <script src="app.js"></script>
     <link href="testprep.css" rel="stylesheet" type="text/css">
 </head>
-<body ng-controller="testprepController">
+<body ng-controller="testprepController as test">
 <div id="content">
     <div class="question-list">
-        <li ng-repeat="q in qidList" ng-bind="q"></li>
+        <li ng-repeat="q in qidList">
+            <a href ng-click="setPointer(q)" ng-bind="q"></a>
+        </li>
     </div>
     <div class="navbar">
     </div>
     <div class="question-content">
         <div class="question-text" ng-bind-html="qstem"></div>
-        <div class="question-option" ng-repeat="answer in answerList.answer">
+        <div class="question-option" ng-repeat="answer in qanswerList.answer">
             <br />
             <input type="radio"><!--needs callback to mark problem as answered when clicked -->
             <span ng-bind-html="answer"><!--needs strikeout when clicked, maybe change to an anchor or button? --></span>

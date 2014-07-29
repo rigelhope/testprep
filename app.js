@@ -5,11 +5,15 @@
     app.controller('testprepController', function($scope,$http){
         var qbank = [];
         var qidList = [];
-        var qstem = "";
-        var qexplanation="";
+        
 
-        function setPointer(newQID) {
-            /* make an object that has all the relevant stuff to change, and return that */
+
+        function setPointer(newIndex) {
+            var i = qidList.indexOf(newIndex);
+            $scope.qstem = qbank[i].prompt;
+            $scope.qanswerList = qbank[i].answerList;
+            $scope.qexplanation = qbank[i].explanation;
+            $scope.currentIndex = newIndex;
         };
     
         $http.get('generated.json').then(function(result) {
@@ -18,11 +22,8 @@
                 qidList.push(qbank[i].id);
             };
             $scope.qidList = qidList;
+            setPointer(qidList[0]);
     
-            /* this can actually go in a setter function, and initialize the array pointer to [0] */
-            $scope.qstem = qbank[0].prompt;
-            $scope.answerList = qbank[0].answerList;
-            $scope.qexplanation = qbank[0].explanation;
         })
         
     });
