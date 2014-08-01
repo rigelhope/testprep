@@ -22,7 +22,7 @@
         getData: function(){
           $http.get('generated.json').then(function(result) {
               angular.copy(result.data,service.qbank);
-              service.setSelected(service.qbank[0])
+              service.setSelected(service.qbank[0]) /* this is testview-specific, probably does not belong here once multiple views/selection is integrated */
           })
         }
       };
