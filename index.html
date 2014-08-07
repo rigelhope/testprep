@@ -8,7 +8,7 @@
 <body ng-controller="testprepController as test">
 <div id="content">
     <div class="question-list">
-        <li ng-repeat="q in qbank">
+        <li ng-repeat="q in qbank | filter: {subject: {$t : 'Cardiology' }}">
             <a href ng-click="setPointer(q)" ng-bind="q.id"></a>
         </li>
     </div>
