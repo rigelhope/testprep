@@ -1,40 +1,44 @@
 <html ng-app="testprep">
-<head>
+
+  <head>
+    <script data-require="angular.js@*" data-semver="1.3.0-beta.5" src="https://code.angularjs.org/1.3.0-beta.5/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.js"></script>
     <script src="app.js"></script>
-    <link href="testprep.css" rel="stylesheet" type="text/css">
-</head>
-<body ng-controller="testprepController as test">
-<div id="content">
-    <div class="question-list">
-        <li ng-repeat="q in qbank | filter: {subject: {$t : 'Cardiology' }}">
-            <a href ng-click="setPointer(q)" ng-bind="q.id"></a>
+    <link href="testprep.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body ng-controller="testprepController as test">
+    <div id="content">
+      <div class="question-list">
+        <!--<li ng-repeat="q in qbank"><!-- this line works-->
+        <li ng-repeat="q in qbank | subjectLimit:'laborum'" ng-init="setPointer(q.$first)"><!-- this line limits the output, but does not start the problems at #1 of results-->
+          <a href="" ng-click="setPointer(q)" ng-bind="q.id"></a>
+          <!--<span ng-show="answered">?</span> <!--check mark for not answered questions: not working -->
         </li>
-    </div>
-    <div class="navbar">
-    </div>
-    <div class="question-content">
+      </div>
+      <div class="navbar"></div>
+      <div class="question-content">
         <div class="question-text" ng-bind-html="selectedQuestion.prompt.$t"></div>
         <div class="question-option" ng-repeat="answer in selectedQuestion.answerList.answer">
-            <br />
-            <input type="radio" name="{{selectedQuestion.id}}" id="{{answer.id}}"><!--needs callback to mark problem as answered when clicked -->
-            <button 
-                ng-class="{'answer-choice': !isStruck, 'answer-choice struck': isStruck}"
-                ng-init="isStruck = false"
-                ng-click="isStruck = !isStruck"
-                ng-bind-html="answer.$t"><!--needs strikeout when clicked, maybe change to an anchor or button? -->
-            </button>
+          <br />
+          <input type="radio" ng-model="answered" name="{{selectedQuestion.id}}" id="{{answer.id}}" />
+          <!--needs callback to mark problem as answered when clicked -->
+          <button ng-class="{'answer-choice': !isStruck, 'answer-choice struck': isStruck}" ng-init="isStruck = false" ng-click="isStruck = !isStruck" ng-bind-html="answer.$t">
+            <!--needs strikeout when clicked, maybe change to an anchor or button? -->
+          </button>
         </div>
         <br />
         <div class="show-answer-box">
-            <label>show answer :<input type="checkbox" ng-model="mustShow" /></label>
+          <label>show answer :            <input type="checkbox" ng-model="mustShow" />
+          </label>
         </div>
         <br />
         <div class="explanation" ng-show="mustShow">
-            <span ng-bind-html="selectedQuestion.explanation.$t"></span>
+          <span ng-bind-html="selectedQuestion.explanation.$t"></span>
         </div>
+      </div>
     </div>
-</div>
-</body>
+  </body>
+
 </html>
