@@ -7,7 +7,9 @@
         $scope.selectedQuestion = DataService.selectedItem;
         $scope.setPointer = function(selectedQuestion) {
             DataService.setSelected(selectedQuestion);
+            $scope.mustShow = false;
         };
+        $scope.allSubjects = DataService.getAllSubjects();
         
     });
     
@@ -24,6 +26,16 @@
               angular.copy(result.data,service.qbank);
               service.setSelected(service.qbank[0]) /* this is testview-specific, probably does not belong here once multiple views/selection is integrated */
           })
+        },
+        getAllSubjects: function getAllSubjects() {
+            var allSubjects = [];
+            for (var i=0;i<service.qbank.length;i++) {
+                var subject = service.qbank[i].subject.$t;
+                if (!(allSubjects.indexOf(subject) > -1)) {
+                    allSubjects.push(subject);
+                };
+            };
+            return allSubjects;
         }
       };
       service.getData();
