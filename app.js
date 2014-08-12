@@ -9,7 +9,10 @@
             DataService.setSelected(selectedQuestion);
             $scope.mustShow = false;
         };
-        $scope.allSubjects = DataService.getAllSubjects();
+        
+        DataService.getData().then(function(){
+          $scope.allSubjects = DataService.getAllSubjects();
+        })
         
     });
     
@@ -22,9 +25,11 @@
           console.log(service.selectedItem)
         },
         getData: function(){
-          $http.get('generated.json').then(function(result) {
+          return $http.get('generated.json').then(function(result) {
               angular.copy(result.data,service.qbank);
               service.setSelected(service.qbank[0]) /* this is testview-specific, probably does not belong here once multiple views/selection is integrated */
+              return service.selectedItem;
+            
           })
         },
         getAllSubjects: function getAllSubjects() {
@@ -38,8 +43,7 @@
             return allSubjects;
         }
       };
-      service.getData();
+    //  service.getData();
       return service;
     })
 })();
-
