@@ -1,7 +1,18 @@
 (function() {
 
-    var app = angular.module('testprep', ['ngSanitize']);
-    
+    var app = angular.module('testprep', ['ngSanitize', 'ngRoute'])
+        .config(function ($routeProvider) {
+            $routeProvider.when("/choose_subjects", {
+                templateUrl: "/subjects.html"
+            });
+            $routeProvider.when("/test", {
+                templateUrl: "/test.html"
+            });
+            $routeProvider.otherwise({
+                templateUrl: "/test.html"
+            });
+        });
+
     app.controller('testprepController', function($scope, DataService){
         $scope.selectedQuestion = DataService.selectedItem;
         $scope.setPointer = function(selectedQuestion) {
