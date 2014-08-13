@@ -3,7 +3,6 @@
     var app = angular.module('testprep', ['ngSanitize']);
     
     app.controller('testprepController', function($scope, DataService){
-        $scope.qbank = DataService.qbank
         $scope.selectedQuestion = DataService.selectedItem;
         $scope.setPointer = function(selectedQuestion) {
             DataService.setSelected(selectedQuestion);
@@ -12,6 +11,7 @@
         
         DataService.getData().then(function(){
           $scope.allSubjects = DataService.getAllSubjects();
+          $scope.qbank = DataService.activeSubset;
         })
         
     });
@@ -27,7 +27,8 @@
         getData: function(){
           return $http.get('generated.json').then(function(result) {
               angular.copy(result.data,service.qbank);
-              service.setSelected(service.qbank[0]) /* this is testview-specific, probably does not belong here once multiple views/selection is integrated */
+              service.activeSubset = service.setSubjectLimits();
+              service.setSelected(service.activeSubset[0]) /* this is testview-specific, probably does not belong here once multiple views/selection is integrated */
               return service.selectedItem;
             
           })
@@ -41,7 +42,28 @@
                 };
             };
             return allSubjects;
+        },
+        activeSubset:[],
+        setSubjectLimits: function setSubjectLimits(subjects) {
+            limited = [];
+            //push qbank, limited by an array of subject strings, into activeSubset
+            if (typeof subjects == "string") {
+                subjects = [subjects];
+            };
+            if (subjects instanceof Array) {
+                for (var i=0;i<service.qbank.length;i++) {
+                    var question = service.qbank[i];
+                    if (subjects.indexOf(question.subject.$t) > -1) {
+                        limited.push(question);
+                    };
+                };
+            } else {
+                console.log('no subject limits found');
+                limited = service.qbank;
+            };
+            return limited;
         }
+
       };
     //  service.getData();
       return service;

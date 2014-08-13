@@ -16,6 +16,12 @@
         {{allSubjects}}
     </div>
     <div class="question-content">
+        <!-- for testing
+        <div class="question-subject">
+            <span style="font-weight: bold;" ng-bind="selectedQuestion.subject.$t"></span> :
+            <span style="font-weight: bold;" ng-bind="selectedQuestion.title.$t"></span>
+        </div>
+        -->
         <div class="question-text" ng-bind-html="selectedQuestion.prompt.$t"></div>
         <div class="question-option" ng-repeat="answer in selectedQuestion.answerList.answer">
             <br />
