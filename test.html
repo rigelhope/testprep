@@ -25,10 +25,10 @@
         </div>
         <br />
         <div class="show-answer-box">
-            <label>show answer :<input type="checkbox" ng-model="mustShow" /></label>
+            <label>show answer :<input type="checkbox" ng-model="model.mustShow" /></label>
         </div>
         <br />
-        <div class="explanation" ng-show="mustShow">
+        <div class="explanation" ng-show="model.mustShow">
             <span ng-bind-html="selectedQuestion.explanation.$t"></span>
         </div>
     </div>

@@ -14,10 +14,13 @@
     });
 
   app.controller('testprepController', function($scope, $location, DataService) {
+    $scope.model = {
+      mustShow: false
+    }
     $scope.selectedQuestion = DataService.selectedItem;
     $scope.setPointer = function(selectedQuestion) {
       DataService.setSelected(selectedQuestion);
-      $scope.mustShow = false;
+      $scope.model.mustShow = false;
     };
 
     DataService.getData().then(function() {
