@@ -1,5 +1,10 @@
+<form ng-submit="submit()">
 <ul>
     <li ng-repeat="subject in allSubjects">
-    <label><input type="checkbox" /><span ng-bind="subject"></span></label>
+    <label><input type="checkbox" ng-model="subjects[subject]"/><span ng-bind="subject"></span></label>
     </li>
 </ul>
+<input type="submit" id="submit" value="Submit" />
+</form>
+<!--<pre>{{subjects | json}}</pre>-->
+<!--<pre>{{activeSubjects | json}}</pre>-->

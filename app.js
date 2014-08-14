@@ -9,11 +9,11 @@
                 templateUrl: "/test.html"
             });
             $routeProvider.otherwise({
-                templateUrl: "/test.html"
+                templateUrl: "/subjects.html"
             });
         });
 
-    app.controller('testprepController', function($scope, DataService){
+    app.controller('testprepController', function($scope, $location, DataService){
         $scope.selectedQuestion = DataService.selectedItem;
         $scope.setPointer = function(selectedQuestion) {
             DataService.setSelected(selectedQuestion);
@@ -23,7 +23,23 @@
         DataService.getData().then(function(){
           $scope.allSubjects = DataService.getAllSubjects();
           $scope.qbank = DataService.activeSubset;
-        })
+        });
+        /* this smells, but it works */
+        $scope.subjects = {};
+        $scope.activeSubjects = [];
+        $scope.submit = function() {
+            var activeSubjects = [];;
+            for (var subject in $scope.subjects) {
+                console.log("selected subject: "+subject);
+                if ($scope.subjects[subject]) {
+                    activeSubjects.push(subject);
+                };
+            };
+            $scope.qbank = DataService.setSubjectLimits(activeSubjects);
+            $scope.activeSubjects = activeSubjects;
+
+            $location.path('/test');
+        };
         
     });
     
@@ -39,7 +55,7 @@
           return $http.get('generated.json').then(function(result) {
               angular.copy(result.data,service.qbank);
               service.activeSubset = service.setSubjectLimits();
-              service.setSelected(service.activeSubset[0]) /* this is testview-specific, probably does not belong here once multiple views/selection is integrated */
+              service.setSelected(service.activeSubset[0]) 
               return service.selectedItem;
             
           })
@@ -68,6 +84,7 @@
                         limited.push(question);
                     };
                 };
+                console.log('subjects limited to: '+limited);
             } else {
                 console.log('no subject limits found');
                 limited = service.qbank;
