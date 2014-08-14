@@ -28,7 +28,7 @@
         $scope.subjects = {};
         $scope.activeSubjects = [];
         $scope.submit = function() {
-            var activeSubjects = [];;
+            var activeSubjects = [];
             for (var subject in $scope.subjects) {
                 console.log("selected subject: "+subject);
                 if ($scope.subjects[subject]) {
