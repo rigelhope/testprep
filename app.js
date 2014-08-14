@@ -37,7 +37,7 @@
             };
             $scope.qbank = DataService.setSubjectLimits(activeSubjects);
             $scope.activeSubjects = activeSubjects;
-
+            $scope.setPointer($scope.qbank[0]);
             $location.path('/test');
         };
         
