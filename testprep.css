@@ -5,3 +5,4 @@
 .question-content {background:aqua; height: calc(100%-100px); padding:15px; overflow:auto;}
 .answer-choice {background:transparent; border:none;}
 .answer-choice.struck {text-decoration: line-through}
+.viewed {color:lime}

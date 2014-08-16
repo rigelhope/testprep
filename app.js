@@ -15,7 +15,8 @@
 
   app.controller('testprepController', function($scope, $location, DataService) {
     $scope.model = {
-      mustShow: false
+      mustShow: false,
+      answered: {}
     }
     $scope.selectedQuestion = DataService.selectedItem;
     $scope.setPointer = function(selectedQuestion) {
@@ -42,6 +43,22 @@
       $scope.activeSubjects = activeSubjects;
       $scope.setPointer($scope.qbank[0]);
       $location.path('/test');
+    };
+
+    $scope.nextQuestion = function(q) {
+        var goToQ = $scope.qbank.indexOf(q);
+        console.log("current question is index "+goToQ);
+        goToQ++;
+        console.log("trying to set question to index "+goToQ);
+        $scope.setPointer($scope.qbank[goToQ]);
+    };
+
+    $scope.prevQuestion = function(q) {
+        var goToQ = $scope.qbank.indexOf(q);
+        console.log("current question is index "+goToQ);
+        goToQ--;
+        console.log("trying to set question to id# "+goToQ);
+        $scope.setPointer($scope.qbank[goToQ]);
     };
 
   });
