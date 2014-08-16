@@ -25,7 +25,7 @@
     };
 
     DataService.getData().then(function() {
-      $scope.allSubjects = DataService.getAllSubjects();
+      $scope.allSubjects = DataService.allSubjects();
       $scope.qbank = DataService.activeSubset;
     });
     /* this smells, but it works */
@@ -71,6 +71,7 @@
         angular.copy(selectedItem, service.selectedItem);
         console.log(service.selectedItem)
       },
+
       getData: function() {
         return $http.get('generated.json').then(function(result) {
           angular.copy(result.data, service.qbank);
@@ -80,16 +81,23 @@
 
         })
       },
-      getAllSubjects: function getAllSubjects() {
-        var allSubjects = [];
-        for (var i = 0; i < service.qbank.length; i++) {
-          var subject = service.qbank[i].subject.$t;
-          if (!(allSubjects.indexOf(subject) > -1)) {
-            allSubjects.push(subject);
+
+      getSubjectDirectory: function() {
+          var subjectDir = {};
+          for (var i=0;i<service.qbank.length;i++) {
+              var subject = service.qbank[i].subject.$t;
+              if (!subjectDir.hasOwnProperty(subject)) {
+                  subjectDir[subject] = [];
+              };
+              subjectDir[subject].push(i);
           };
-        };
-        return allSubjects;
+          return subjectDir;
       },
+
+      allSubjects: function () {
+          return Object.keys(service.getSubjectDirectory());
+      },
+
       activeSubset: [],
       setSubjectLimits: function setSubjectLimits(subjects) {
         limited = [];
