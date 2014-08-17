@@ -28,7 +28,7 @@
       $scope.allSubjects = DataService.allSubjects();
       $scope.qbank = DataService.activeSubset;
     });
-    /* this smells, but it works */
+
     $scope.subjects = {};
     $scope.submit = function() {
       $scope.qbank = DataService.setSubjectLimits($scope.subjects);
