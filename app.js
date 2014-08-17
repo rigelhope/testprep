@@ -65,23 +65,33 @@
 
   app.service("DataService", function($http) {
     var service = {
+      //qbank will contain the cached global set of questions
       qbank: [],
+
+      //selectedItem will contain the current item
+      //TODO: turn this into an index of qbank rather than containing a question copy
       selectedItem: {},
+
+      //setSelected copies the selected item into selectedItem
       setSelected: function(selectedItem) {
         angular.copy(selectedItem, service.selectedItem);
         console.log(service.selectedItem)
       },
 
+      //getData is the init function, should only need to be run once per session.
+      //sets 'activeSubset' to entire qbank if it doesnt receive a set of limits
       getData: function() {
         return $http.get('generated.json').then(function(result) {
           angular.copy(result.data, service.qbank);
           service.activeSubset = service.setSubjectLimits();
           service.setSelected(service.activeSubset[0])
           return service.selectedItem;
-
         })
       },
 
+      //getSubjectDirectory returns an object that is the directory of subjects in the qbank
+      //keys are subject names
+      //values are an array of qbank indexes
       getSubjectDirectory: function() {
           var subjectDir = {};
           for (var i=0;i<service.qbank.length;i++) {
@@ -94,11 +104,16 @@
           return subjectDir;
       },
 
+      //allSubjects returns an array of subject names
       allSubjects: function () {
           return Object.keys(service.getSubjectDirectory());
       },
 
+      //activeSubset is the current set of testing questions
       activeSubset: [],
+
+      //setSubjectLimits takes a list of subjects
+      //    and returns a set of questions from qbank that fit those subject limits
       setSubjectLimits: function setSubjectLimits(subjects) {
         limited = [];
         //push qbank, limited by an array of subject strings, into activeSubset
@@ -121,7 +136,6 @@
       }
 
     };
-    //  service.getData();
     return service;
   })
 })();
