@@ -30,17 +30,8 @@
     });
     /* this smells, but it works */
     $scope.subjects = {};
-    $scope.activeSubjects = [];
     $scope.submit = function() {
-      var activeSubjects = [];
-      for (var subject in $scope.subjects) {
-        console.log("selected subject: " + subject);
-        if ($scope.subjects[subject]) {
-          activeSubjects.push(subject);
-        };
-      };
-      $scope.qbank = DataService.setSubjectLimits(activeSubjects);
-      $scope.activeSubjects = activeSubjects;
+      $scope.qbank = DataService.setSubjectLimits($scope.subjects);
       $scope.setPointer($scope.qbank[0]);
       $location.path('/test');
     };
@@ -115,25 +106,59 @@
       //setSubjectLimits takes a list of subjects
       //    and returns a set of questions from qbank that fit those subject limits
       setSubjectLimits: function setSubjectLimits(subjects) {
-        limited = [];
-        //push qbank, limited by an array of subject strings, into activeSubset
-        if (typeof subjects == "string") {
-          subjects = [subjects];
+        var subjectSubsetIndices = service.getSubjectSubset(subjects);
+        var subjectSubsetQuestions = [];
+        for (var i=0;i<subjectSubsetIndices.length;i++) {
+            subjectSubsetQuestions.push(service.qbank[subjectSubsetIndices[i]]);
         };
-        if (subjects instanceof Array) {
-          for (var i = 0; i < service.qbank.length; i++) {
-            var question = service.qbank[i];
-            if (subjects.indexOf(question.subject.$t) > -1) {
-              limited.push(question);
-            };
+        return subjectSubsetQuestions;
+      },
+      
+      //setSubjectSubset returns the subject limited indices of qbank
+      //refactored from setSubjectLimits
+      getSubjectSubset: function (subjects) {
+          //create a local variable to hold the indices
+          var activeIndices = [];
+
+          //get the subject directory
+          var dir = service.getSubjectDirectory();
+          
+          //formatting input of "subjects" from previous version removed
+          //assuming "subjects" will be of the format { subject : true/false, ... }
+          for (var subject in subjects) {
+              if (subjects[subject]) {
+                  console.log ('adding subject '+subject+' with qbank indices '+dir[subject]);
+                  activeIndices.push.apply(activeIndices, dir[subject]);
+              };
           };
-          console.log('subjects limited to: ' + limited);
-        } else {
-          console.log('no subject limits found');
-          limited = service.qbank;
-        };
-        return limited;
-      }
+
+          return activeIndices;
+      },
+
+
+//  old version - activeSubset contained question objects
+//        limited = [];
+//        //push qbank, limited by an array of subject strings, into activeSubset
+//        if (typeof subjects == "string") {
+//          subjects = [subjects];
+//        };
+//        if (subjects instanceof Array) {
+//          for (var i = 0; i < service.qbank.length; i++) {
+//            var question = service.qbank[i];
+//            if (subjects.indexOf(question.subject.$t) > -1) {
+//              limited.push(question);
+//            };
+//          };
+//          console.log('subjects limited to: ' + limited);
+//        } else {
+//          console.log('no subject limits found');
+//          limited = service.qbank;
+//        };
+//        return limited;
+//
+//  rewrite - activeSubset contains qbank indices only
+          
+      
 
     };
     return service;
