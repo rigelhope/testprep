@@ -135,31 +135,6 @@
           return activeIndices;
       },
 
-
-//  old version - activeSubset contained question objects
-//        limited = [];
-//        //push qbank, limited by an array of subject strings, into activeSubset
-//        if (typeof subjects == "string") {
-//          subjects = [subjects];
-//        };
-//        if (subjects instanceof Array) {
-//          for (var i = 0; i < service.qbank.length; i++) {
-//            var question = service.qbank[i];
-//            if (subjects.indexOf(question.subject.$t) > -1) {
-//              limited.push(question);
-//            };
-//          };
-//          console.log('subjects limited to: ' + limited);
-//        } else {
-//          console.log('no subject limits found');
-//          limited = service.qbank;
-//        };
-//        return limited;
-//
-//  rewrite - activeSubset contains qbank indices only
-          
-      
-
     };
     return service;
   })
