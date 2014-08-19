@@ -10,9 +10,8 @@
       Current Question : 
       <span ng-bind="selectedQuestion.id"></span>
       <br />
-      <!--TODO: make next/prev buttons work -->
-      <button ng-click="previousQuestion()">prev</button>
-      <button ng-click="nextQuestion()">next</button>
+      <button ng-click="setQuestion(previousQuestion())">prev</button>
+      <button ng-click="setQuestion(nextQuestion())">next</button>
       <!--TODO: mark-question button w/ model that shows in TOC -->
       <!--TODO: popup list of normal lab values-->
   </div>
@@ -41,6 +40,6 @@
       </div>
       <br />
       <div class="explanation" ng-show="model.mustShow">
-          <span ng-bind-html="selectedQuestion.explanation.$t"></span>
+          <span ng-bind-html="selectedQuestion.explanation"></span>
       </div>
   </div>

@@ -47,18 +47,19 @@
     $scope.questions = $filter('subjectFilter')(DataService.qbank, DataService.subjects)
 
     $scope.selectedQuestion = $scope.questions[0];
-    
+    $scope.model = {'mustShow': false};
+
     $scope.nextQuestion = function(){
-      var currentIdx = $scope.questions.indexOf($scope.selectedQuestion);
-      $scope.selectedQuestion = $scope.questions[currentIdx + 1];
+      return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))+1];
     };
     $scope.previousQuestion = function(){
-      var currentIdx = $scope.questions.indexOf($scope.selectedQuestion);
-      $scope.selectedQuestion = $scope.questions[currentIdx - 1];
+      return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))-1];
     };
     $scope.setQuestion = function(q) {
       var qIdx = $scope.questions.indexOf(q)
       $scope.selectedQuestion = $scope.questions[qIdx];
+      //reset "show answer" checkbox
+      $scope.model.mustShow = false;
     }
 
 
