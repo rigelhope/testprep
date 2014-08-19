@@ -55,6 +55,10 @@
     $scope.previousQuestion = function(){
       var currentIdx = $scope.questions.indexOf($scope.selectedQuestion);
       $scope.selectedQuestion = $scope.questions[currentIdx - 1];
+    };
+    $scope.setQuestion = function(q) {
+      var qIdx = $scope.questions.indexOf(q)
+      $scope.selectedQuestion = $scope.questions[qIdx];
     }
 
 
