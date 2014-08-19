@@ -2,138 +2,112 @@
 
   var app = angular.module('testprep', ['ngSanitize', 'ngRoute'])
     .config(function($routeProvider) {
+
       $routeProvider.when("/choose_subjects", {
-        templateUrl: "/subjects.html"
+        templateUrl: "subjects.html",
+        controller: "subjectChoiceController"
       });
       $routeProvider.when("/test", {
-        templateUrl: "/test.html"
+        templateUrl: "test.html",
+        controller: "testprepController"
       });
       $routeProvider.otherwise({
-        templateUrl: "/subjects.html"
+        redirectTo: "/choose_subjects"
       });
     });
 
-  app.controller('testprepController', function($scope, $location, DataService) {
-    $scope.model = {
-      mustShow: false,
-      answered: {}
-    }
-    $scope.selectedQuestion = DataService.selectedItem;
-    $scope.setPointer = function(selectedQuestion) {
-      DataService.setSelected(selectedQuestion);
-      $scope.model.mustShow = false;
-    };
+  app.controller('subjectChoiceController', function($scope, $location, DataService) {
 
-    DataService.getData().then(function() {
-      $scope.allSubjects = DataService.allSubjects();
-      $scope.qbank = DataService.activeSubset;
+    DataService.fetchData().then(function() {
+      $scope.allSubjects = DataService.subjects;
     });
 
-    $scope.subjects = {};
-    $scope.submit = function() {
-      $scope.qbank = DataService.setSubjectLimits($scope.subjects);
-      $scope.setPointer($scope.qbank[0]);
-      $location.path('/test');
-    };
+    $scope.goToQuestions = function() {
+      $location.path('/test')
+    }
+  });
 
-    $scope.nextQuestion = function(q) {
-        var goToQ = $scope.qbank.indexOf(q);
-        console.log("current question is index "+goToQ);
-        goToQ++;
-        console.log("trying to set question to index "+goToQ);
-        $scope.setPointer($scope.qbank[goToQ]);
-    };
 
-    $scope.prevQuestion = function(q) {
-        var goToQ = $scope.qbank.indexOf(q);
-        console.log("current question is index "+goToQ);
-        goToQ--;
-        console.log("trying to set question to id# "+goToQ);
-        $scope.setPointer($scope.qbank[goToQ]);
+  app.filter('subjectFilter', function() {
+
+    return function(questions, subjects) {
+      var selectedGroups = questions.filter(function(question) {
+        return subjects[question.subject].selected;
+      });
+
+      return selectedGroups.reduce(function(all, group) {
+        return all.concat(group);
+      }, [])
+    }
+
+  })
+
+  app.controller('testprepController', function($scope, $location, DataService, $filter) {
+
+    $scope.questions = $filter('subjectFilter')(DataService.qbank, DataService.subjects)
+
+    $scope.selectedQuestion = $scope.questions[0];
+    
+    $scope.nextQuestion = function(){
+      var currentIdx = $scope.questions.indexOf($scope.selectedQuestion);
+      $scope.selectedQuestion = $scope.questions[currentIdx + 1];
     };
+    $scope.previousQuestion = function(){
+      var currentIdx = $scope.questions.indexOf($scope.selectedQuestion);
+      $scope.selectedQuestion = $scope.questions[currentIdx - 1];
+    }
+
 
   });
 
   app.service("DataService", function($http) {
+
+    function Question(rawData) {
+      this.id = rawData.id;
+      this.subject = rawData.subject.$t;
+      this.prompt = rawData.prompt.$t;
+      this.title = rawData.title.$t;
+      this.answers = rawData.answerList.answer.map(function(rawAnswer) {
+        var answer = {};
+        answer.value = rawAnswer.$t;
+        return answer;
+      });
+      
+      this.showAnswer = false;
+
+      //hide the answer choice;
+      var correctAnswer = rawData.answerList.correct;
+
+      this.isCorrect = function(assertedAnswer) {
+        return assertedAnswer == correctAnswer;
+      }
+
+      this.explanation = rawData.explanation.$t;
+    }
+
     var service = {
       //qbank will contain the cached global set of questions
       qbank: [],
+      subjects: {},
 
-      //selectedItem will contain the current item
-      //TODO: turn this into an index of qbank rather than containing a question copy
-      selectedItem: {},
-
-      //setSelected copies the selected item into selectedItem
-      setSelected: function(selectedItem) {
-        angular.copy(selectedItem, service.selectedItem);
-        console.log(service.selectedItem)
-      },
-
-      //getData is the init function, should only need to be run once per session.
-      //sets 'activeSubset' to entire qbank if it doesnt receive a set of limits
-      getData: function() {
+      //fetchData is the init function, should only need to be run once per session.
+      fetchData: function() {
         return $http.get('generated.json').then(function(result) {
-          angular.copy(result.data, service.qbank);
-          service.activeSubset = service.setSubjectLimits();
-          service.setSelected(service.activeSubset[0])
-          return service.selectedItem;
+          service.qbank = result.data.map(function(rawQuestion) {
+            //clean up the question by creating an instance for each
+            var question = new Question(rawQuestion);
+            //sort questions into groups
+            if (!service.subjects[question.subject]) {
+              service.subjects[question.subject] = [];
+            }
+            service.subjects[question.subject].push(question);
+            return question;
+          })
+
+          return service.qbank;
         })
-      },
+      }
 
-      //getSubjectDirectory returns an object that is the directory of subjects in the qbank
-      //keys are subject names
-      //values are an array of qbank indexes
-      getSubjectDirectory: function() {
-          var subjectDir = {};
-          for (var i=0;i<service.qbank.length;i++) {
-              var subject = service.qbank[i].subject.$t;
-              if (!subjectDir.hasOwnProperty(subject)) {
-                  subjectDir[subject] = [];
-              };
-              subjectDir[subject].push(i);
-          };
-          return subjectDir;
-      },
-
-      //allSubjects returns an array of subject names
-      allSubjects: function () {
-          return Object.keys(service.getSubjectDirectory());
-      },
-
-      //activeSubset is the current set of testing questions
-      activeSubset: [],
-
-      //setSubjectLimits takes a list of subjects
-      //    and returns a set of questions from qbank that fit those subject limits
-      setSubjectLimits: function setSubjectLimits(subjects) {
-        var subjectSubsetIndices = service.getSubjectSubset(subjects);
-        var subjectSubsetQuestions = [];
-        for (var i=0;i<subjectSubsetIndices.length;i++) {
-            subjectSubsetQuestions.push(service.qbank[subjectSubsetIndices[i]]);
-        };
-        return subjectSubsetQuestions;
-      },
-      
-      //setSubjectSubset returns the subject limited indices of qbank
-      //refactored from setSubjectLimits
-      getSubjectSubset: function (subjects) {
-          //create a local variable to hold the indices
-          var activeIndices = [];
-
-          //get the subject directory
-          var dir = service.getSubjectDirectory();
-          
-          //formatting input of "subjects" from previous version removed
-          //assuming "subjects" will be of the format { subject : true/false, ... }
-          for (var subject in subjects) {
-              if (subjects[subject]) {
-                  console.log ('adding subject '+subject+' with qbank indices '+dir[subject]);
-                  activeIndices.push.apply(activeIndices, dir[subject]);
-              };
-          };
-
-          return activeIndices;
-      },
 
     };
     return service;
