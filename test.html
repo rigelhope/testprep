@@ -2,7 +2,7 @@
       <li ng-repeat="q in questions">
       <a href ng-click="setQuestion(q)" ng-bind="q.id"></a>
       <!--<a href ng-click="setPointer(q)" ng-bind="q.id" ng-class="{'viewed' : viewedQ==true }" ng-click="viewedQ = true"></a> <!- no idea why this isnt working to change css class to mark viewed items-->
-      <!--<span ng-show="model.answered">&#10003</span>-->
+      <span ng-show="checkTag(q,'answered')">&#10003</span>
       <!--TODO: make model so that when a radio button is clicked, a checkmark appears-->
       </li>
   </div>
@@ -25,7 +25,7 @@
       <div class="question-text" ng-bind-html="selectedQuestion.prompt"></div>
       <div class="question-option" ng-repeat="answer in selectedQuestion.answers">
           <br />
-          <input type="radio" name="{{selectedQuestion.id}}" id="{{answer.id}}"><!--needs callback to mark problem as answered when clicked -->
+          <input type="radio" name="{{selectedQuestion.id}}" id="{{answer.id}}" ng-model="selectedQuestion.tags" value='["answered"]'>
           <!--<input type="radio" name="{{selectedQuestion.id}}" id="{{answer.id}}" ng-model="model.answered[selectedQuestion.id]"><!- this doesnt work, auto-selects the last choice -->
           <button 
               ng-class="{'answer-choice': !isStruck, 'answer-choice struck': isStruck}"

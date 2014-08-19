@@ -74,7 +74,14 @@
       $scope.selectedQuestion = $scope.questions[qIdx];
       //reset "show answer" checkbox
       $scope.model.mustShow = false;
-    }
+    };
+    $scope.setTag = function(q, newTag) {
+      console.log('adding tag '+newTag+' to question '+q.id);
+      q.tags.push(newTag);
+    };
+    $scope.checkTag = function(q, tag) {
+      return (q.tags.indexOf(tag) > -1);
+    };
 
 
   });
@@ -102,6 +109,7 @@
       }
 
       this.explanation = rawData.explanation.$t;
+      this.tags = [];
     }
 
     var service = {
@@ -111,7 +119,7 @@
 
       //fetchData is the init function, should only need to be run once per session.
       fetchData: function() {
-        return $http.get('generated.json').then(function(result) {
+        return $http.get('2ck.json').then(function(result) {
           service.qbank = result.data.map(function(rawQuestion) {
             //clean up the question by creating an instance for each
             var question = new Question(rawQuestion);
