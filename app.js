@@ -39,12 +39,26 @@
         return all.concat(group);
       }, [])
     }
+  });
 
-  })
+  app.filter('shuffleFilter', function () {
+    //Fisher-Yates shuffle implemented as a filter, per http://bost.ocks.org/mike/shuffle/
+    return function (questionArray) {
+      var m = questionArray.length, t, i;
+
+      while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = questionArray[m];
+        questionArray[m] = questionArray[i];
+        questionArray[i] = t;
+      };
+      return questionArray;
+    };
+  });
 
   app.controller('testprepController', function($scope, $location, DataService, $filter) {
 
-    $scope.questions = $filter('subjectFilter')(DataService.qbank, DataService.subjects)
+    $scope.questions = $filter('shuffleFilter')($filter('subjectFilter')(DataService.qbank, DataService.subjects));
 
     $scope.selectedQuestion = $scope.questions[0];
     $scope.model = {'mustShow': false};
