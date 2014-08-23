@@ -119,7 +119,7 @@
 
       //fetchData is the init function, should only need to be run once per session.
       fetchData: function() {
-        return $http.get('2ck.json').then(function(result) {
+        return $http.get('generated.json').then(function(result) {
           service.qbank = result.data.map(function(rawQuestion) {
             //clean up the question by creating an instance for each
             var question = new Question(rawQuestion);
