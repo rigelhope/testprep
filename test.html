@@ -1,5 +1,4 @@
-
-  <div class="navbar">
+  <div class="navbar-fixed-top">
       Current Question : 
       <span ng-bind="selectedQuestion.id"></span>
       <br />
@@ -9,13 +8,13 @@
       <!--TODO: popup list of normal lab values-->
   </div>
   <div class="row">  
-  <div class="question-list nav nav-sidebar col-xs-1">
+  <div class="question-list sidebar nav-sidebar">
       <li ng-repeat="q in questions">
       <a href ng-click="setQuestion(q)" ng-bind="q.id"></a>
       <span ng-show="checkTag(q,'answered')">&#10003</span>
       </li>
   </div>
-  <div class="question-content col-xs-11">
+  <div class="question-content main">
       <!-- for testing
       <div class="question-subject">
           <span style="font-weight: bold;" ng-bind="selectedQuestion.subject.$t"></span> :
