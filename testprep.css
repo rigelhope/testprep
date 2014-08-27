@@ -1,8 +1,9 @@
+/*
 #content {height:100%;width:100%; padding:0px;}
 .question-list {width:100px; float:left; background: gold; height:100%; overflow:auto;}
 .question-list li:nth-child(odd) {background:goldenrod;}
 .navbar {height:100px; float:top; background:green;}
 .question-content {background:aqua; height: calc(100%-100px); padding:15px; overflow:auto;}
+*/
 .answer-choice {background:transparent; border:none;}
 .answer-choice.struck {text-decoration: line-through}
-.viewed {color:lime}

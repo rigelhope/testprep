@@ -1,7 +1,7 @@
 <form ng-submit="submit()">
 <ul>
     <li ng-repeat="(subjectName, subject) in allSubjects">
-    <label><input type="checkbox" ng-model="subject.selected"/><span ng-bind="subjectName"></span></label>
+    <label><input type="checkbox" ng-model="subject.selected" ng-init="subject.selected=true"/><span ng-bind="subjectName"></span></label>
     </li>
 </ul>
 <button ng-click="goToQuestions()">Submit</button>
