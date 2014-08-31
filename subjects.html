@@ -4,6 +4,7 @@
     <label><input type="checkbox" ng-model="subject.selected" ng-init="subject.selected=true"/><span ng-bind="subjectName"></span></label>
     </li>
 </ul>
+<button ng-click="clearSelections()">Clear all</button>
 <button ng-click="goToQuestions()">Submit</button>
 </form>
 <!--<pre>{{subjects | json}}</pre>-->
