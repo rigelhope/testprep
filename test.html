@@ -1,12 +1,14 @@
   <div class="navbar-fixed-top">
-      Current Question : 
+      Current Question :
       <span ng-bind="selectedQuestion.id"></span>
       <br />
       <button ng-click="setQuestion(previousQuestion())">prev</button>
       <button ng-click="setQuestion(nextQuestion())">next</button>
+      <button ng-click="storeData()">store session</button>
+
       <!--TODO: popup list of normal lab values-->
   </div>
-  <div class="row">  
+  <div class="row">
   <div class="question-list sidebar nav-sidebar">
       <li ng-repeat="q in questions">
       <a href ng-click="setQuestion(q)" ng-bind="q.id"></a>
@@ -24,9 +26,9 @@
       <div class="question-option" ng-repeat="answer in selectedQuestion.answers">
           <br />
           <input type="radio" name="{{selectedQuestion.id}}" id="{{answer.id}}" ng-click="setTag(selectedQuestion,'answered')">
-          <button 
+          <button
               ng-class="{'answer-choice': !isStruck, 'answer-choice struck': isStruck}"
-              
+
               ng-click="isStruck = !isStruck"
               ng-bind-html="answer.value">
           </button>

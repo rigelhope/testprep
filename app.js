@@ -11,14 +11,21 @@
         templateUrl: "test.html",
         controller: "testprepController"
       });
+      $routeProvider.when("/import", {
+          templateUrl: "import.html",
+          controller: "importController"
+      });
       $routeProvider.otherwise({
         redirectTo: "/choose_subjects"
       });
     });
 
+  app.controller('importController', function($scope, $location, DataService) {
+  });
+
   app.controller('subjectChoiceController', function($scope, $location, DataService) {
 
-    /* simple controller that loads the question bank and 
+    /* simple controller that loads the question bank and
      * gets a list of subjects
      */
     DataService.fetchData().then(function() {
@@ -42,7 +49,7 @@
   app.filter('subjectFilter', function() {
 
     /* filters active questions based on subjects selected
-     * 
+     *
      */
 
     return function(questions, subjects) {
@@ -77,7 +84,7 @@
 
   app.controller('testprepController', function($scope, $location, DataService, $filter) {
 
-    //first filter by subject  
+    //first filter by subject
     $scope.questions = $filter('subjectFilter')(DataService.qbank, DataService.subjects);
     //then shuffle list
     $scope.questions = $filter('shuffleFilter')($scope.questions);
@@ -95,7 +102,7 @@
     $scope.previousQuestion = function(){
       return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))-1];
     };
-    
+
     //go-to question
     $scope.setQuestion = function(q) {
       var qIdx = $scope.questions.indexOf(q)
@@ -113,6 +120,7 @@
       return (q.tags.indexOf(tag) > -1);
     };
 
+    $scope.storeData = DataService.storeData();
 
   });
 
@@ -128,7 +136,7 @@
         answer.value = rawAnswer.$t;
         return answer;
       });
-      
+
       this.showAnswer = false;
 
       //hide the answer choice;
@@ -149,22 +157,38 @@
 
       //fetchData is the init function, should only need to be run once per session.
       fetchData: function() {
-        return $http.get('generated.json').then(function(result) {
-          service.qbank = result.data.map(function(rawQuestion) {
-            //clean up the question by creating an instance for each
-            var question = new Question(rawQuestion);
-            //sort questions into groups
-            if (!service.subjects[question.subject]) {
-              service.subjects[question.subject] = [];
-            }
-            service.subjects[question.subject].push(question);
-            return question;
+        if (
+          localforage.length>0 &&
+          window.confirm('would you like to load a saved session?')
+        ) {
+          //not sure how to use the localForage key/keys function
+          service.qbank = localforage.getItem('stored_session', function(value) {
+            return value;
           })
+        } else {
+          return $http.get('generated.json').then(function(result) {
+            service.qbank = result.data.map(function(rawQuestion) {
+              //clean up the question by creating an instance for each
+              var question = new Question(rawQuestion);
+              //sort questions into groups
+              if (!service.subjects[question.subject]) {
+                service.subjects[question.subject] = [];
+              }
+              service.subjects[question.subject].push(question);
+              return question;
+            })
 
-          return service.qbank;
-        })
+            return service.qbank;
+          })
       }
+      },
 
+      storeData: function() {
+        //
+        localforage.setItem('stored_session',service.qbank, function() {
+          console.log('stored session!');
+        });
+      }
 
     };
     return service;
