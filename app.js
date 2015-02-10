@@ -97,14 +97,27 @@
       $scope.model.mustShow = false;
     };
 
-    $scope.setTag = function(q, newTag) {
-      console.log('adding tag '+newTag+' to question '+q.id);
-      q.tags.push(newTag);
+    $scope.toggleTag = function(q, tag) {
+      //console.log('adding tag '+newTag+' to question '+q.id);
+      if (checkTag(q, tag)) {
+        q.tags.pop(tag);
+        console.log('tag removed: ' + tag);
+      } else {
+        q.tags.push(tag);
+        console.log('tag added: ' + tag);
+      };
     };
 
-    $scope.checkTag = function(q, tag) {
+    $scope.setTag = function(q, tag) {
+      q.tags.push(tag);
+      console.log('set tag: ' + tag);
+    };
+
+    checkTag = function(q, tag) {
       return (q.tags.indexOf(tag) > -1);
     };
+
+    $scope.checkTag = checkTag;
 
     //$scope.storeData = DataService.storeData();
 
