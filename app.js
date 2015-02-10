@@ -11,16 +11,36 @@
         templateUrl: "test.html",
         controller: "testprepController"
       });
-      $routeProvider.when("/import", {
-          templateUrl: "import.html",
-          controller: "importController"
+      $routeProvider.when("/session", {
+          templateUrl: "session.html",
+          controller: "sessionController"
       });
       $routeProvider.otherwise({
-        redirectTo: "/choose_subjects"
+        redirectTo: "/session"
       });
     });
 
-  app.controller('importController', function($scope, $location, DataService) {
+  app.controller('sessionController', function($scope, $location, DataService) {
+    /*
+     *
+     */
+     //first check localForage to see if there's an existing session already
+     localforage.keys()
+      .then(function(keys) {
+        console.log('found keys : ' + keys);
+        if (keys.length) {
+          console.log('found a session!');
+          // load session, pass directly to test
+        } else {
+          console.log('found no stored sessions, generating new one');
+          DataService.fetchData();
+          $location.path('/choose_subjects');
+        }
+     })
+
+     //if no sessions exist, then pull from service.fetchData
+     //TODO: import arbitrary qbank
+
   });
 
   app.controller('subjectChoiceController', function($scope, $location, DataService) {
@@ -28,11 +48,9 @@
     /* simple controller that loads the question bank and
      * gets a list of subjects
      */
-    DataService.fetchData().then(function() {
-      $scope.allSubjects = DataService.subjects;
-      //console.log(JSON.stringify($scope.allSubjects));
-      console.log($scope.allSubjects);
-    });
+
+    $scope.allSubjects = DataService.subjects;
+    //console.log('subject choice controller found the following objects: ' + $scope.allSubjects);
 
     $scope.clearSelections = function() {
         angular.forEach($scope.allSubjects, function(subject) {
@@ -45,6 +63,52 @@
     }
   });
 
+  app.controller('testprepController', function($scope, $location, DataService, $filter) {
+
+    //first filter by subject
+    //$scope.questions = $filter('subjectFilter')(DataService.qbank, DataService.subjects);
+    //then shuffle list
+    //$scope.questions = $filter('shuffleFilter')($scope.questions);
+
+    DataService.filterSubjects();
+    DataService.shuffleTest();
+
+    $scope.questions = DataService.activeTest;
+
+    //select first question in list to open with
+    $scope.selectedQuestion = $scope.questions[0];
+
+    //init with answer not showing
+    $scope.model = {'mustShow': false};
+
+    //nextQuestion and previous Question return indexes
+    $scope.nextQuestion = function(){
+      return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))+1];
+    };
+    $scope.previousQuestion = function(){
+      return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))-1];
+    };
+
+    //go-to question
+    $scope.setQuestion = function(q) {
+      var qIdx = $scope.questions.indexOf(q)
+      $scope.selectedQuestion = $scope.questions[qIdx];
+      //reset "show answer" checkbox
+      $scope.model.mustShow = false;
+    };
+
+    $scope.setTag = function(q, newTag) {
+      console.log('adding tag '+newTag+' to question '+q.id);
+      q.tags.push(newTag);
+    };
+
+    $scope.checkTag = function(q, tag) {
+      return (q.tags.indexOf(tag) > -1);
+    };
+
+    //$scope.storeData = DataService.storeData();
+
+  });
 
   app.filter('subjectFilter', function() {
 
@@ -82,49 +146,7 @@
     };
   });
 
-  app.controller('testprepController', function($scope, $location, DataService, $filter) {
-
-    //first filter by subject
-    $scope.questions = $filter('subjectFilter')(DataService.qbank, DataService.subjects);
-    //then shuffle list
-    $scope.questions = $filter('shuffleFilter')($scope.questions);
-
-    //select first question in list to open with
-    $scope.selectedQuestion = $scope.questions[0];
-
-    //init with answer not showing
-    $scope.model = {'mustShow': false};
-
-    //nextQuestion and previous Question return indexes
-    $scope.nextQuestion = function(){
-      return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))+1];
-    };
-    $scope.previousQuestion = function(){
-      return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))-1];
-    };
-
-    //go-to question
-    $scope.setQuestion = function(q) {
-      var qIdx = $scope.questions.indexOf(q)
-      $scope.selectedQuestion = $scope.questions[qIdx];
-      //reset "show answer" checkbox
-      $scope.model.mustShow = false;
-    };
-
-    $scope.setTag = function(q, newTag) {
-      console.log('adding tag '+newTag+' to question '+q.id);
-      q.tags.push(newTag);
-    };
-
-    $scope.checkTag = function(q, tag) {
-      return (q.tags.indexOf(tag) > -1);
-    };
-
-    $scope.storeData = DataService.storeData();
-
-  });
-
-  app.service("DataService", function($http) {
+  app.service("DataService", function($http, $filter) {
 
     function Question(rawData) {
       this.id = rawData.id;
@@ -154,18 +176,10 @@
       //qbank will contain the cached global set of questions
       qbank: [],
       subjects: {},
+      activeTest: [],
 
       //fetchData is the init function, should only need to be run once per session.
       fetchData: function() {
-        if (
-          localforage.length>0 &&
-          window.confirm('would you like to load a saved session?')
-        ) {
-          //not sure how to use the localForage key/keys function
-          service.qbank = localforage.getItem('stored_session', function(value) {
-            return value;
-          })
-        } else {
           return $http.get('generated.json').then(function(result) {
             service.qbank = result.data.map(function(rawQuestion) {
               //clean up the question by creating an instance for each
@@ -180,15 +194,15 @@
 
             return service.qbank;
           })
-      }
       },
 
-      storeData: function() {
-        //
-        localforage.setItem('stored_session',service.qbank, function() {
-          console.log('stored session!');
-        });
-      }
+      filterSubjects: function() {
+        this.activeTest = $filter('subjectFilter')(this.qbank, this.subjects);
+      },
+
+      shuffleTest: function() {
+        this.activeTest = $filter('shuffleFilter')(this.activeTest);
+      },
 
     };
     return service;
