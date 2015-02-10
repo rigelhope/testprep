@@ -5,14 +5,18 @@
       <button ng-click="setQuestion(previousQuestion())">prev</button>
       <button ng-click="setQuestion(nextQuestion())">next</button>
       <button ng-click="storeData()">store session</button>
-
-      <!--TODO: popup list of normal lab values-->
+      <button ng-click="setTag(selectedQuestion, 'marked')">mark</button>
+      <select name="answeredWrong">
+        <!--TODO: list of options for how answered wrong, bound to some model -->
+      </select>
+        <!--TODO: popup list of normal lab values-->
   </div>
   <div class="row">
     <div class="question-list sidebar nav-sidebar">
       <li ng-repeat="q in questions">
       <a href ng-click="setQuestion(q)" ng-bind="q.id"></a>
       <span ng-show="checkTag(q,'answered')">&#10003</span>
+      <span ng-show="checkTag(q,'marked')">!</span>
       </li>
     </div>
     <div class="question-content main">
