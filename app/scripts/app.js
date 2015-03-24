@@ -24,6 +24,10 @@ angular
         templateUrl: 'views/test.html',
         controller: 'TestCtrl'
       })
+      .when('/sessions', {
+        templateUrl: 'views/sessions.html',
+        controller: 'SessionsCtrl'
+      })
       .otherwise({
         redirectTo: '/subjects'
       });
