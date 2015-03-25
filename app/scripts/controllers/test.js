@@ -10,6 +10,7 @@
 angular.module('testprepApp')
   .controller('TestCtrl', function ($scope, $location, DataService, $filter) {
 
+    // move this stuff to DataService
     //first filter by subject  
     $scope.questions = $filter('subject')(DataService.qbank, DataService.subjects);
     //then shuffle list
@@ -46,4 +47,12 @@ angular.module('testprepApp')
       return (q.tags.indexOf(tag) > -1);
     };
 
+    $scope.saveSession = function() {
+      var sessionName = new Date().toString();
+      //console.log(sessionName);
+      localforage.setItem(sessionName, $scope.questions)
+        .then(function () {
+          console.log('saved session as '+sessionName);
+        });
+    };
   });
