@@ -1,5 +1,6 @@
 'use strict';
 
+
 /**
  * @ngdoc service
  * @name testprepApp.DataService
@@ -8,7 +9,7 @@
  * Service in the testprepApp.
  */
 angular.module('testprepApp')
-  .service('DataService', function($http) {
+  .service('DataService', function($http, $filter) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     function Question(rawData) {
@@ -39,10 +40,11 @@ angular.module('testprepApp')
       //qbank will contain the cached global set of questions
       qbank: [],
       subjects: {},
+      questions: [],
 
       //fetchData is the init function, should only need to be run once per session.
-      fetchData: function() {
-        return $http.get('generated.json').then(function(result) {
+      fetchData: function(file) {
+        return $http.get(file).then(function(result) {
           service.qbank = result.data.map(function(rawQuestion) {
             //clean up the question by creating an instance for each
             var question = new Question(rawQuestion);
@@ -56,8 +58,15 @@ angular.module('testprepApp')
 
           return service.qbank;
         });
-      }
+      },
 
+      filterSubjects: function(subjects) {
+        service.questions = $filter('subject')(service.qbank, subjects);
+      },
+
+      shuffleQuestions: function() {
+        service.questions = $filter('shuffle')(service.questions);
+      },
 
     };
     return service;

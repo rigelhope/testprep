@@ -11,7 +11,7 @@
 angular.module('testprepApp')
   .controller('SubjectsCtrl', function ($scope, $location, DataService) {
 
-    DataService.fetchData().then(function() {
+    DataService.fetchData('generated.json').then(function() {
       $scope.allSubjects = DataService.subjects;
       //console.log(JSON.stringify($scope.allSubjects));
       console.log($scope.allSubjects);
@@ -24,6 +24,8 @@ angular.module('testprepApp')
     };
 
     $scope.goToQuestions = function() {
+      DataService.filterSubjects(DataService.subjects);
+      DataService.shuffleQuestions();
       $location.path('/test');
     };
   });

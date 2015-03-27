@@ -1,4 +1,5 @@
 'use strict';
+/*global localforage */
 
 /**
  * @ngdoc function
@@ -8,13 +9,9 @@
  * Controller of the testprepApp
  */
 angular.module('testprepApp')
-  .controller('TestCtrl', function ($scope, $location, DataService, $filter) {
+  .controller('TestCtrl', function ($scope, $location, DataService) {
 
-    // move this stuff to DataService
-    //first filter by subject  
-    $scope.questions = $filter('subject')(DataService.qbank, DataService.subjects);
-    //then shuffle list
-    $scope.questions = $filter('shuffle')($scope.questions);
+    $scope.questions = DataService.questions;
 
     //select first question in list to open with
     $scope.selectedQuestion = $scope.questions[0];
@@ -50,7 +47,7 @@ angular.module('testprepApp')
     $scope.saveSession = function() {
       var sessionName = new Date().toString();
       //console.log(sessionName);
-      localforage.setItem(sessionName, $scope.questions)
+      localforage.setItem(sessionName, JSON.stringify(DataService.questions))
         .then(function () {
           console.log('saved session as '+sessionName);
         });
