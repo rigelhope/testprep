@@ -1,5 +1,9 @@
+<form ng-submit="submit()">
 <div ng-if="stored.keys.length === 0">loading sessions...</div>
 <ul>
   <li ng-repeat="key in stored.keys">{{key}}</li>
 </ul>
 
+<button ng-click="loadStored('Fri Mar 27 2015 11:44:37 GMT-0700 (PDT)')">load stored</button>
+
+</form>

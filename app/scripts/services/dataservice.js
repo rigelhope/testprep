@@ -40,6 +40,7 @@ angular.module('testprepApp')
       //qbank will contain the cached global set of questions
       qbank: [],
       subjects: {},
+      //questions will contain the (filtered) active question set
       questions: [],
 
       //fetchData is the init function, should only need to be run once per session.
@@ -66,6 +67,10 @@ angular.module('testprepApp')
 
       shuffleQuestions: function() {
         service.questions = $filter('shuffle')(service.questions);
+      },
+
+      loadQuestions: function(questionSet) {
+        service.questions = questionSet;
       },
 
     };

@@ -11,6 +11,7 @@
 angular.module('testprepApp')
   .controller('SubjectsCtrl', function ($scope, $location, DataService) {
 
+    //have this take a filename from a form, instead of generated.json
     DataService.fetchData('generated.json').then(function() {
       $scope.allSubjects = DataService.subjects;
       //console.log(JSON.stringify($scope.allSubjects));

@@ -9,7 +9,7 @@
  * Controller of the testprepApp
  */
 angular.module('testprepApp')
-  .controller('TestCtrl', function ($scope, $location, DataService) {
+  .controller('TestCtrl', function ($scope, DataService) {
 
     $scope.questions = DataService.questions;
 
@@ -35,6 +35,7 @@ angular.module('testprepApp')
       $scope.model.mustShow = false;
     };
 
+    // move to dataservice with a handle
     $scope.setTag = function(q, newTag) {
       console.log('adding tag '+newTag+' to question '+q.id);
       q.tags.push(newTag);
@@ -44,6 +45,7 @@ angular.module('testprepApp')
       return (q.tags.indexOf(tag) > -1);
     };
 
+    //this should probably go into DataService too, actually
     $scope.saveSession = function() {
       var sessionName = new Date().toString();
       //console.log(sessionName);
