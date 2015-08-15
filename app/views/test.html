@@ -43,7 +43,9 @@
     </div>
   </div>
 
-  <div class="question-content main">
+  <div class="question-content main" 
+      ng-swipe-left="setQuestion(nextQuestion())"
+      ng-swipe-right="setQuestion(previousQuestion())">
       <!-- for testing
       <div class="question-subject">
           <span style="font-weight: bold;" ng-bind="selectedQuestion.subject.$t"></span> :
