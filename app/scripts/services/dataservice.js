@@ -33,7 +33,13 @@ angular.module('testprepApp')
       };
 
       this.explanation = rawData.explanation.$t;
-      this.tags = [];
+      this.tags = []; //re-initializes every time it's instantiated, possibly a problem w persistence here
+      this.annotate = function(annotation) {
+        this.tags.push(annotation);
+        //TODO: date/time stamp
+        //TODO: annotations probably need their own data structure
+        //for now it's just text and im not sure how to display it.
+      };
     }
 
     var service = {
@@ -71,6 +77,11 @@ angular.module('testprepApp')
 
       loadQuestions: function(questionSet) {
         service.questions = questionSet;
+      },
+
+      //TODO:this really should have some kind of bounds checking
+      annotateQuestion: function() {
+
       },
 
     };
