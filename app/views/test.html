@@ -33,6 +33,9 @@
           <h4 class="modal-title" id="noteModalLabel">Notes...</h4>
         </div>
         <div class="modal-body">
+          <li ng-repeat="note in selectedQuestion.tags">
+            {{note}}
+          </li>
           <textarea name="myNote" rows=5></textarea>
         </div>
         <div class="modal-footer">
