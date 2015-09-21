@@ -55,7 +55,7 @@
           <span style="font-weight: bold;" ng-bind="selectedQuestion.title.$t"></span>
       </div>
       -->
-      <div class="question-text" ng-bind-html="selectedQuestion.prompt"></div>
+      <div id="question-stem" class="question-text" ng-bind-html="selectedQuestion.prompt"></div>
       <div class="question-option" ng-repeat="answer in selectedQuestion.answers">
           <br />
           <input type="radio" name="{{selectedQuestion.id}}" id="{{answer.id}}" ng-click="setTag(selectedQuestion,'answered')">
@@ -76,4 +76,3 @@
       </div>
  </div>
  </div>
-
