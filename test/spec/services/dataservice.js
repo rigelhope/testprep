@@ -9,10 +9,9 @@ describe('Service: DataService', function () {
 
 
   // instantiate service
-  var DataService, httpBackend;
-  beforeEach(inject(function (_DataService_, $httpBackend) {
+  var DataService;
+  beforeEach(inject(function (_DataService_) {
     DataService = _DataService_;
-    httpBackend = $httpBackend;
   }));
 
 //  it gets json data and loads it into local memory (qbank)
