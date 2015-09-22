@@ -4,10 +4,6 @@
 
 describe('Service: DataService', function () {
 
-  // load the service's module
-  //beforeEach(module('testprepApp'));
-
-
   // instantiate service
   var DataService;
   beforeEach(function() {
@@ -16,26 +12,31 @@ describe('Service: DataService', function () {
 
       //inject DataService, connect an outside variable to it
       inject(function (_DataService_) {
-        DataService = _DataService_;
+        this.DataService = _DataService_;
       });
 
       //let's see if i can move the fetchData out here to DRY
-//      DataService.fetchData('generated.json');
 
+      this.DataService.fetchData('generated.json')
+        .then(function(result) {
+          console.log('fetched : ');
+          console.log(result);
+          this.DataService = result;
+        });
   });
 
 //  it gets json data and loads it into local memory (qbank)
   it('gets json data and loads it into a local object', function() {
-    DataService.fetchData('generated.json').then(function() {
-      expect(DataService.qbank.length).toBeGreaterThan(0);
-    });
-//    expect(DataService.qbank.length).toBeGreaterThan(0);
+//    DataService.fetchData('generated.json').then(function() {
+//      expect(DataService.qbank.length).toBeGreaterThan(0);
+//    });
+    expect(this.DataService.qbank.length).toBeGreaterThan(0);
   });
 
 //
 //  it puts some or all of the json into a presentation queue
   it('puts some or all of the data into a presentation queue', function() {
-    DataService.fetchData('generated.json').then(function(service) {
+    this.DataService.fetchData('generated.json').then(function(service) {
       service.loadQuestions(service.qbank)}).then(function() {
         expect(DataService.qbank).toEqual(DataService.questions);
       });
