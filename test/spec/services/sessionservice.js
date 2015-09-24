@@ -23,7 +23,7 @@ describe('session service', function() {
     done();
   });
 
-  it('can add and remove sessions', function() {
+  it('can add and remove sessions', function(done) {
     SessionService.addSession('foo',{});
     SessionService.listSessions().then(function(sessions) {
       console.log(sessions);
@@ -33,13 +33,14 @@ describe('session service', function() {
     SessionService.listSessions().then(function(sessions) {
       expect(sessions).not.toInclude('foo');
     });
-    //done();
+    done();
   });
 
-  xit('has a fallback option if no sessions are found', function() {
+  it('has a fallback option if no sessions are found', function(done) {
     var content = SessionService.getSession('foo')
     console.log(content);
     expect(content).toBeDefined();
+    done();
   });
 
 });
