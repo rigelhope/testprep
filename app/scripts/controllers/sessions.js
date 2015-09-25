@@ -15,6 +15,6 @@ angular.module('testprepApp')
     DataService.getKeys().then(function() {
       $scope.sessions = DataService.sessions;
     });
-    console.log($scope.sessions);
+    //console.log($scope.sessions);
 
   });
