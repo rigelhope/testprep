@@ -9,7 +9,7 @@
  * Service in the testprepApp.
  */
 angular.module('testprepApp')
-  .service('DataService', function($http, $filter) {
+  .service('DataService', function($http, $filter, $localForage) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     function Question(rawData) {
@@ -79,11 +79,12 @@ angular.module('testprepApp')
         service.questions = questionSet;
       },
 
-      //TODO:this really should have some kind of bounds checking
-      annotateQuestion: function() {
-
-      },
-
+      getKeys: function() {
+        $localForage.keys().then(function(result){
+          return result;
+        });
+//        return $localForage.keys();
+      }
     };
     return service;
   });

@@ -12,7 +12,8 @@ angular
   .module('testprepApp', [
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'LocalForageModule'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -29,6 +30,6 @@ angular
         controller: 'SessionsCtrl'
       })
       .otherwise({
-        redirectTo: '/subjects'
+        redirectTo: '/sessions'
       });
   });
