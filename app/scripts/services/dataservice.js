@@ -57,8 +57,8 @@ angular.module('testprepApp')
       //sessions will hold the list of keys for each of the localforage sessions
 
       //fetchData is the init function, should only need to be run once per session.
-      fetchData: function(file) {
-        return $http.get(file).then(function(result) {
+      fetchData: function(sessionName) {
+        SessionService.getSession(sessionName).then(function(result) {
           service.qbank = result.data.map(function(rawQuestion) {
             //clean up the question by creating an instance for each
             var question = new Question(rawQuestion);

@@ -8,7 +8,7 @@
  * Controller of the testprepApp
  */
 angular.module('testprepApp')
-  .controller('SessionsCtrl', function ($scope, $timeout, $location, DataService) {
+  .controller('SessionsCtrl', function ($scope, $timeout, $location, DataService, SessionService) {
 
     $scope.sessions = [];
 

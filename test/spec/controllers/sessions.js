@@ -1,5 +1,5 @@
 'use strict';
-
+ 
 describe('Controller: SessionsCtrl', function () {
 
   // load the controller's module
@@ -16,7 +16,9 @@ describe('Controller: SessionsCtrl', function () {
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+  xit('should get a list of sessions', function() {
+  
   });
+
+
 });
