@@ -110,6 +110,10 @@ angular.module('testprepApp')
         return $localForage.setItem(sessionName, JSON.stringify(service.questions)).then(function(result){
           console.log(result);
         });
+      },
+
+      addTag: function(question, tag) {
+        question.tags.push(tag);
       }
     };
     return service;

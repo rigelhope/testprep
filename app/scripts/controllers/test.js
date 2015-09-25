@@ -38,7 +38,7 @@ angular.module('testprepApp')
     // move to dataservice with a handle
     $scope.setTag = function(q, newTag) {
       //console.log('adding tag '+newTag+' to question '+q.id);
-      q.annotate(newTag);
+      DataService.addTag(q, newTag);
     };
 
     $scope.checkTag = function(q, tag) {
