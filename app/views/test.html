@@ -7,11 +7,13 @@
       <button ng-click="setTag(selectedQuestion, 'marked')">mark</button>
       <!--
       <select name="answeredWrong">
-         TODO: list of options for how answered wrong, bound to some model 
+         TODO: list of options for how answered wrong, bound to some model
       </select>
-      --> 
-      <!--
+      -->
+
+
       <button ng-click="saveSession()">save</button>
+      <!--
       TODO: popup list of normal lab values
       -->
       <button data-toggle="modal" data-target="#noteModal" >note</button>
@@ -46,7 +48,7 @@
     </div>
   </div>
 
-  <div class="question-content main" 
+  <div class="question-content main"
       ng-swipe-left="setQuestion(nextQuestion())"
       ng-swipe-right="setQuestion(previousQuestion())">
       <!-- for testing
@@ -76,4 +78,3 @@
       </div>
  </div>
  </div>
-

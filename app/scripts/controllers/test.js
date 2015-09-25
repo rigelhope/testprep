@@ -26,7 +26,7 @@ angular.module('testprepApp')
     $scope.previousQuestion = function(){
       return $scope.questions[($scope.questions.indexOf($scope.selectedQuestion))-1];
     };
-    
+
     //go-to question
     $scope.setQuestion = function(q) {
       var qIdx = $scope.questions.indexOf(q);
@@ -47,11 +47,7 @@ angular.module('testprepApp')
 
     //this should probably go into DataService too, actually
     $scope.saveSession = function() {
-      var sessionName = new Date().toString();
       //console.log(sessionName);
-      localforage.setItem(sessionName, JSON.stringify(DataService.questions))
-        .then(function () {
-          console.log('saved session as '+sessionName);
-        });
+      DataService.saveSession()
     };
   });

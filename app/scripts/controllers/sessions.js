@@ -18,9 +18,10 @@ angular.module('testprepApp')
     //console.log($scope.sessions);
 
     $timeout(function(){
-      DataService.loadSession('your mom').then(function(){
+      DataService.loadSession($scope.sessions[0]).then(function(){
+      //lets just automatically load the first result for now
         $location.path('/test')
       })
     }, 2000);
-    
+
   });

@@ -96,10 +96,19 @@ angular.module('testprepApp')
         return $localForage.getItem(key).then(function(result){
         //return $localForage.pull(key).then(function(result){
         //while testing, we still want to keep the session there
-          //service.questions = result;
-          service.qbank = result;
+          service.questions = JSON.parse(result);
+          //service.qbank = result;
           //this could cause problems if the value of the stored session is an object rather than an array
           //could push it directly to the questions list, since presumably theres nothing else to change about it
+        });
+      },
+
+      saveSession: function() {
+        var sessionName = new Date().toString();
+        console.log(sessionName);
+        console.log(service.questions);
+        return $localForage.setItem(sessionName, JSON.stringify(service.questions)).then(function(result){
+          console.log(result);
         });
       }
     };
