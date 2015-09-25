@@ -8,7 +8,7 @@
  * Controller of the testprepApp
  */
 angular.module('testprepApp')
-  .controller('SessionsCtrl', function ($scope, $timeout, $location, DataService, SessionService) {
+  .controller('SessionsCtrl', function ($scope, $timeout, $location, DataService) {
 
     $scope.sessions = [];
 
@@ -18,7 +18,7 @@ angular.module('testprepApp')
     //console.log($scope.sessions);
 
     $timeout(function(){
-      DataService.loadSession($scope.sessions[3]).then(function(){
+      DataService.loadSession($scope.sessions[4]).then(function(){
       //lets just automatically load the first result for now
         $location.path('/test')
       })
