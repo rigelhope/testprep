@@ -13,6 +13,8 @@ angular.module('testprepApp')
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     function Question(rawData) {
+      //in a perfect world, these field specifications would be replaced by
+      //constant defs up above
       this.id = rawData.id;
       this.subject = rawData.subject.$t;
       this.prompt = rawData.prompt.$t;
@@ -22,7 +24,7 @@ angular.module('testprepApp')
         answer.value = rawAnswer.$t;
         return answer;
       });
-      
+
       this.showAnswer = false;
 
       //hide the answer choice;
@@ -33,7 +35,9 @@ angular.module('testprepApp')
       };
 
       this.explanation = rawData.explanation.$t;
-      this.tags = []; //re-initializes every time it's instantiated, possibly a problem w persistence here
+      this.tags = [];
+      //re-initializes every time it's instantiated, possibly a problem w persistence here
+
       this.annotate = function(annotation) {
         this.tags.push(annotation);
         //TODO: date/time stamp
@@ -48,6 +52,9 @@ angular.module('testprepApp')
       subjects: {},
       //questions will contain the (filtered) active question set
       questions: [],
+
+      sessions: [],
+      //sessions will hold the list of keys for each of the localforage sessions
 
       //fetchData is the init function, should only need to be run once per session.
       fetchData: function(file) {
@@ -80,8 +87,8 @@ angular.module('testprepApp')
       },
 
       getKeys: function() {
-        $localForage.keys().then(function(result){
-          return result;
+        return $localForage.keys().then(function(result){
+          service.sessions = result;
         });
 //        return $localForage.keys();
       }

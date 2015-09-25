@@ -30,4 +30,3 @@ angular.module('testprepApp')
       $location.path('/test');
     };
   });
-

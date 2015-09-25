@@ -10,7 +10,11 @@
 angular.module('testprepApp')
   .controller('SessionsCtrl', function ($scope, $timeout, $location, DataService) {
 
-    $scope.sessions = DataService.getKeys;
+    $scope.sessions = [];
+
+    DataService.getKeys().then(function() {
+      $scope.sessions = DataService.sessions;
+    });
+    console.log($scope.sessions);
 
   });
-
