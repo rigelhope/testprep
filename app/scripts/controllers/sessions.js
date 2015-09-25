@@ -17,4 +17,10 @@ angular.module('testprepApp')
     });
     //console.log($scope.sessions);
 
+    $timeout(function(){
+      DataService.loadSession('your mom').then(function(){
+        $location.path('/test')
+      })
+    }, 2000);
+    
   });

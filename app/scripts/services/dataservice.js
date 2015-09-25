@@ -90,7 +90,17 @@ angular.module('testprepApp')
         return $localForage.keys().then(function(result){
           service.sessions = result;
         });
-//        return $localForage.keys();
+      },
+
+      loadSession: function(key){
+        return $localForage.getItem(key).then(function(result){
+        //return $localForage.pull(key).then(function(result){
+        //while testing, we still want to keep the session there
+          //service.questions = result;
+          service.qbank = result;
+          //this could cause problems if the value of the stored session is an object rather than an array
+          //could push it directly to the questions list, since presumably theres nothing else to change about it
+        });
       }
     };
     return service;
