@@ -26,7 +26,7 @@ angular.module('testprepApp')
 //    }, 20000);
 
     $scope.startSession = function(session){
-      console.log("session : "+session);
+      //console.log("session : "+session);
       DataService.loadSession(session).then(function(){
         $location.path('/test');
       });
