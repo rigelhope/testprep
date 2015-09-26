@@ -1,5 +1,4 @@
 'use strict';
-/*global localforage */
 
 /**
  * @ngdoc function
@@ -48,6 +47,6 @@ angular.module('testprepApp')
     //this should probably go into DataService too, actually
     $scope.saveSession = function() {
       //console.log(sessionName);
-      DataService.saveSession()
+      DataService.saveSession();
     };
   });

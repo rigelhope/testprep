@@ -15,7 +15,7 @@ angular.module('testprepApp')
     DataService.fetchData('generated.json').then(function() {
       $scope.allSubjects = DataService.subjects;
       //console.log(JSON.stringify($scope.allSubjects));
-      console.log($scope.allSubjects);
+      //console.log($scope.allSubjects);
     });
 
     $scope.clearSelections = function() {
